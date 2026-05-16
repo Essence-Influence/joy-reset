@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Joy Reset">
+<meta name="theme-color" content="#2A2118">
+<meta name="description" content="A 30-day guided reflection journey for women returning to joy.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+<title>The Joy Reset™</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#FAF7F2;--parchment:#F3EDE3;--warm:#FEFCF9;
+  --gold:#C9A96E;--gold-l:#E8D5B0;--gold-d:#A07840;
+  --rose:#C4837A;--sage:#7A9B7E;--lav:#9B87C4;--teal:#7AADB9;
+  --ink:#2A2118;--ink-m:#5C4E3A;--ink-s:#8B7D6B;
+  --div:rgba(201,169,110,0.2);
+  --w1:#C4837A;--w2:#7A9B7E;--w3:#C9A96E;--w4:#9B87C4;--w5:#7AADB9;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+html,body{height:100%;overflow:hidden;background:var(--ink)}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);overscroll-behavior:none}
+
+#app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── SCREENS ── */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--cream);overflow:hidden}
+.screen.active{display:flex}
+.scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+/* ── SAFE AREA HELPERS ── */
+.safe-top{padding-top:calc(var(--sat) + 8px)}
+.safe-bot{padding-bottom:calc(var(--sab) + 8px)}
+
+/* ── SPLASH ── */
+#splash{background:linear-gradient(150deg,#1E1810 0%,#2A2118 55%,#1A150E 100%);align-items:center;justify-content:center;text-align:center;padding:2rem}
+.splash-inner{padding-top:var(--sat);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;position:relative;z-index:2}
+.s-ring{position:absolute;border-radius:50%;border:1px solid rgba(201,169,110,.13);top:50%;left:50%;transform:translate(-50%,-50%);animation:breathe 5s ease-in-out infinite}
+.s-ring:nth-child(2){width:min(300px,75vw);height:min(300px,75vw)}
+.s-ring:nth-child(3){width:min(480px,120vw);height:min(480px,120vw);border-color:rgba(201,169,110,.06);animation-delay:.9s}
+.s-ring:nth-child(4){width:min(160px,40vw);height:min(160px,40vw);border-color:rgba(201,169,110,.2);animation-delay:.35s}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+.s-badge{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:.8}
+.s-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,10vw,3.4rem);font-weight:400;color:var(--gold-l);line-height:1.05;margin-bottom:.4rem}
+.s-title em{font-style:italic;display:block;font-size:.65em;font-weight:300;color:rgba(232,213,176,.55)}
+.s-divider{width:56px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.3rem auto}
+.s-sub{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(232,213,176,.42);line-height:1.7;margin-bottom:2rem;max-width:320px}
+.s-pillars{display:flex;gap:.9rem;justify-content:center;margin-bottom:2rem}
+.s-pillar{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,169,110,.38)}
+.s-btn{background:transparent;border:1px solid rgba(201,169,110,.4);color:var(--gold-l);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;padding:14px 34px;cursor:pointer;border-radius:2px;transition:all .25s;min-height:48px}
+
+/* ── TOP NAV ── */
+.top-nav{background:var(--ink);padding:.9rem 1.1rem;padding-top:calc(var(--sat) + .9rem);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10}
+.tn-title{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--gold-l);font-weight:400}
+.tn-right{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,169,110,.4)}
+.tn-back{background:none;border:none;color:rgba(201,169,110,.55);font-size:22px;cursor:pointer;padding:4px 8px;line-height:1;min-width:44px;min-height:44px;display:flex;align-items:center}
+
+/* ── BOTTOM NAV ── */
+.bnav{background:var(--ink);display:flex;justify-content:space-around;padding:.55rem 0;padding-bottom:calc(var(--sab) + .55rem);flex-shrink:0;border-top:1px solid rgba(201,169,110,.12);z-index:10}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:.3rem .6rem;min-width:60px;min-height:48px;justify-content:center}
+.bnav-btn .bi{font-size:22px;color:rgba(201,169,110,.3);transition:color .2s;line-height:1}
+.bnav-btn .bl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,169,110,.28);transition:color .2s}
+.bnav-btn.active .bi,.bnav-btn.active .bl{color:var(--gold)}
+
+/* ── HOME ── */
+.h-hero{padding:1.75rem 1.25rem 1.25rem;background:var(--warm);border-bottom:1px solid var(--div)}
+.h-greeting{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.h-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400;color:var(--ink);line-height:1.2;margin-bottom:.4rem}
+.h-title em{font-style:italic;color:var(--ink-m)}
+.h-sub{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--ink-s);line-height:1.6}
+.prog-strip{display:flex;gap:3px;margin-top:1rem;flex-wrap:wrap}
+.pd{width:16px;height:4px;border-radius:2px;background:var(--div);flex-shrink:0;transition:background .3s}
+.pd.done{background:var(--sage)}
+.pd.cur{background:var(--gold)}
+.plabel{font-size:10px;color:var(--ink-s);letter-spacing:.1em;text-transform:uppercase;margin-top:.4rem}
+.tc{margin:1.1rem 1.1rem 0;background:var(--ink);border-radius:6px;padding:1.35rem;cursor:pointer;active:opacity:.9}
+.tc-lbl{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.tc-day{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--gold-l);margin-bottom:.3rem;font-weight:400}
+.tc-prompt{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:rgba(232,213,176,.65);line-height:1.55}
+.tc-cta{display:flex;align-items:center;gap:.35rem;margin-top:.85rem;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.7}
+.sec-lbl{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-s);margin-bottom:.65rem}
+.wk-card{background:var(--warm);border:1px solid var(--div);border-radius:4px;margin-bottom:.5rem;padding:.9rem 1rem;display:flex;align-items:center;gap:.8rem;cursor:pointer;transition:border-color .15s;min-height:60px}
+.wk-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.wk-info{flex:1}
+.wk-num{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-s);margin-bottom:2px}
+.wk-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--ink)}
+.wk-pr{font-size:10px;color:var(--ink-s);margin-top:1px}
+.wk-arr{color:var(--ink-s);opacity:.4;font-size:16px}
+
+/* ── INSTALL BANNER ── */
+.install-banner{background:var(--parchment);border-bottom:1px solid var(--div);padding:.85rem 1.1rem;display:flex;align-items:center;gap:.75rem}
+.ib-icon{font-size:22px;flex-shrink:0}
+.ib-text{flex:1}
+.ib-title{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.ib-sub{font-size:11px;color:var(--ink-s);line-height:1.4}
+.ib-btn{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:8px 14px;background:var(--ink);color:var(--gold-l);border:none;border-radius:2px;cursor:pointer;white-space:nowrap;min-height:36px}
+.ib-close{background:none;border:none;color:var(--ink-s);font-size:18px;cursor:pointer;padding:4px;min-width:30px;min-height:30px;display:flex;align-items:center;justify-content:center}
+
+/* ── RITUAL ── */
+.rit-hero{padding:2rem 1.25rem 1.5rem;background:linear-gradient(180deg,#1E1810 0%,#2A2118 100%);text-align:center}
+.rit-eye{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;opacity:.7}
+.rit-title{font-family:'Playfair Display',serif;font-size:1.55rem;color:var(--gold-l);font-weight:400;margin-bottom:.4rem}
+.rit-sub{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:rgba(232,213,176,.4);line-height:1.6}
+.rit-step{background:var(--warm);border:1px solid var(--div);border-radius:4px;padding:1rem;margin-bottom:.65rem}
+.rs-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.4rem}
+.rs-q{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--ink);line-height:1.55;margin-bottom:.65rem}
+.rs-ta{width:100%;min-height:72px;background:var(--parchment);border:1px solid var(--div);border-radius:3px;padding:.7rem;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink);line-height:1.65;resize:none;outline:none;-webkit-appearance:none;transition:border-color .2s;font-size:16px}
+.rs-ta:focus{border-color:var(--gold)}
+.rs-ta::placeholder{color:var(--ink-s);font-style:italic;opacity:.55}
+.rit-btn{width:100%;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;padding:14px;background:var(--ink);color:var(--gold-l);border:none;border-radius:3px;cursor:pointer;margin-top:.4rem;min-height:50px}
+.intention-box{background:var(--ink);border-radius:4px;padding:1.1rem;margin-bottom:.65rem;text-align:center}
+.ib2-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;opacity:.7}
+.ib2-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:rgba(232,213,176,.8);line-height:1.6}
+
+/* ── WEEK SCREEN ── */
+.wh{padding:1.65rem 1.25rem 1.1rem;background:var(--warm);border-bottom:1px solid var(--div)}
+.wh-eye{font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.3rem}
+.wh-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:400;color:var(--ink);line-height:1.2}
+.wh-title em{font-style:italic;color:var(--ink-m)}
+.wh-int{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--ink-s);line-height:1.6;margin-top:.45rem}
+.aff-c{margin:1.1rem;background:var(--parchment);border:1px solid var(--div);border-radius:4px;padding:.85rem 1rem}
+.aff-l{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.aff-t{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--ink-m);line-height:1.6}
+.wsum-row{margin:0 1.1rem .5rem;background:var(--warm);border:1px solid var(--div);border-radius:4px;padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;min-height:56px}
+.dr{background:var(--warm);border:1px solid var(--div);border-radius:4px;margin-bottom:.5rem;padding:.8rem .9rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;min-height:60px}
+.dr-n{font-family:'Playfair Display',serif;font-size:1.1rem;width:26px;flex-shrink:0;text-align:center}
+.dr-c{flex:1}
+.dr-lbl{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-s);margin-bottom:1px}
+.dr-p{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--ink-m);line-height:1.35}
+.dr-ck{font-size:16px;color:var(--sage);opacity:0;transition:opacity .3s;flex-shrink:0}
+.dr-ck.done{opacity:1}
+
+/* ── WEEK SUMMARY ── */
+.ws-hero{padding:1.65rem 1.25rem 1.1rem;background:var(--warm);border-bottom:1px solid var(--div)}
+.ws-q{background:var(--warm);border:1px solid var(--div);border-radius:4px;padding:.85rem 1rem;margin-bottom:.6rem}
+.ws-ql{font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem}
+.ws-qt{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--ink);line-height:1.55;margin-bottom:.55rem}
+.ws-ta{width:100%;min-height:72px;background:var(--parchment);border:1px solid var(--div);border-radius:3px;padding:.7rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ink);line-height:1.6;resize:none;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.ws-ta:focus{border-color:var(--gold)}
+.ws-ta::placeholder{color:var(--ink-s);font-style:italic;opacity:.5}
+.ws-save{width:100%;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:13px;background:var(--ink);color:var(--gold-l);border:none;border-radius:3px;cursor:pointer;margin-top:.3rem;min-height:50px;transition:background .2s}
+.ws-save.saved{background:var(--sage);color:#fff}
+
+/* ── DAY SCREEN ── */
+.dh{padding:1.5rem 1.25rem 1rem;background:var(--warm);border-bottom:1px solid var(--div)}
+.dh-lbl{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-s);margin-bottom:.2rem}
+.dh-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;line-height:1}
+.dh-p{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:var(--ink);line-height:1.6;margin-top:.5rem}
+.dh-rule{height:2px;border-radius:2px;margin-top:.9rem;width:44px}
+.ref-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+.ref-lbl::after{content:'';flex:1;height:1px;background:var(--div)}
+.ref-ta{width:100%;min-height:200px;background:var(--warm);border:1px solid var(--div);border-radius:4px;padding:.9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ink);line-height:1.7;resize:none;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.ref-ta:focus{border-color:var(--gold)}
+.ref-ta::placeholder{color:var(--ink-s);font-style:italic;opacity:.5}
+.ref-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.75rem}
+.ref-cnt{font-size:10px;color:var(--ink-s);letter-spacing:.1em;text-transform:uppercase}
+.save-b{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:11px 20px;background:var(--ink);color:var(--gold-l);border:none;border-radius:2px;cursor:pointer;transition:background .2s;min-height:44px}
+.save-b.saved{background:var(--sage);color:#fff}
+
+/* ── AFFIRMATIONS ── */
+.aff-hero{padding:1.75rem 1.25rem 1.25rem;background:linear-gradient(180deg,#1E1810 0%,#2A2118 100%);text-align:center}
+.aff-hero-eye{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;opacity:.7}
+.aff-hero-t{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--gold-l);font-weight:400}
+.aff-hero-s{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:rgba(232,213,176,.38);margin-top:.3rem}
+.aff-big{border-radius:6px;padding:1.35rem 1.2rem;margin-bottom:.65rem;position:relative}
+.ab-week{font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.4rem;opacity:.8}
+.ab-wname{font-family:'Playfair Display',serif;font-size:1rem;font-weight:400;margin-bottom:.5rem;color:var(--ink)}
+.ab-text{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;line-height:1.65;color:var(--ink-m)}
+.ab-fav{position:absolute;top:.9rem;right:.9rem;background:none;border:none;cursor:pointer;font-size:20px;opacity:.3;transition:opacity .2s;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+.ab-fav.active{opacity:1}
+
+/* ── EXPORT ── */
+.exp-hero{padding:1.65rem 1.25rem 1.1rem;background:var(--warm);border-bottom:1px solid var(--div)}
+.exp-eye{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.exp-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:400;color:var(--ink)}
+.exp-sub{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--ink-s);line-height:1.6;margin-top:.35rem}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-bottom:1rem}
+.stat-c{background:var(--warm);border:1px solid var(--div);border-radius:4px;padding:.7rem .5rem;text-align:center}
+.sv{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400}
+.sl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-s);margin-top:2px}
+.exp-prev{background:var(--parchment);border:1px solid var(--div);border-radius:4px;padding:1rem;margin-bottom:.85rem;max-height:200px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ep-day{margin-bottom:.85rem;padding-bottom:.85rem;border-bottom:1px solid var(--div)}
+.ep-day:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ep-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem}
+.ep-num{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:400}
+.ep-q{font-size:10px;font-style:italic;color:var(--ink-s);font-family:'Cormorant Garamond',serif}
+.ep-entry{font-family:'Cormorant Garamond',serif;font-size:.88rem;color:var(--ink-m);line-height:1.5}
+.exp-btn{width:100%;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;padding:14px;background:var(--ink);color:var(--gold-l);border:none;border-radius:3px;cursor:pointer;margin-bottom:.5rem;min-height:50px;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.exp-btn.sec{background:transparent;border:1px solid var(--div);color:var(--ink-m)}
+
+/* ── CLOSING ── */
+#closing{background:var(--ink);align-items:center;justify-content:center;text-align:center;padding:2.5rem 2rem}
+.cl-c{padding-top:var(--sat)}
+.cl-orn{font-size:1.8rem;color:var(--gold);margin-bottom:1.2rem;opacity:.55}
+.cl-t{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--gold-l);margin-bottom:.6rem;font-weight:400}
+.cl-b{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(232,213,176,.42);line-height:1.75;margin-bottom:1.75rem}
+.cl-btn{background:transparent;border:1px solid rgba(201,169,110,.35);color:var(--gold-l);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;padding:14px 28px;cursor:pointer;border-radius:2px;min-height:50px}
+
+/* ── TOAST ── */
+.toast{position:absolute;bottom:calc(var(--sab) + 72px);left:50%;transform:translateX(-50%) translateY(120%);background:var(--ink);color:var(--gold-l);font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;padding:.65rem 1rem;border-radius:4px;border:1px solid rgba(201,169,110,.25);transition:transform .35s ease;z-index:300;max-width:88vw;text-align:center;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SPLASH -->
+<div class="screen active" id="splash">
+  <div class="s-ring"></div><div class="s-ring"></div><div class="s-ring"></div>
+  <div class="splash-inner">
+    <div class="s-badge">A 30-Day Guided Reflection Journey</div>
+    <h1 class="s-title">The Joy Reset&#x2122;<em>30 Days Back to Yourself</em></h1>
+    <div class="s-divider"></div>
+    <p class="s-sub">For women returning to joy, realigning with Essence, and intentionally shaping Legacy.</p>
+    <div class="s-pillars"><span class="s-pillar">Joy</span><span class="s-pillar">·</span><span class="s-pillar">Essence</span><span class="s-pillar">·</span><span class="s-pillar">Legacy</span></div>
+    <button class="s-btn" onclick="enterApp()">Begin Your Journey</button>
+    <div style="margin-top:1.5rem;font-family:'Cormorant Garamond',serif;font-size:.8rem;font-style:italic;color:rgba(201,169,110,.3)">by Leah A. Owens</div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="home">
+  <div class="top-nav safe-top"><div class="tn-title">The Joy Reset&#x2122;</div><div class="tn-right" id="h-stat"></div></div>
+  <div id="install-bar"></div>
+  <div class="scroll-body">
+    <div class="h-hero">
+      <div class="h-greeting">Welcome back, Leah</div>
+      <h2 class="h-title">Your journey <em>continues here.</em></h2>
+      <p class="h-sub">Each day, one prompt. One honest moment. One step back to yourself.</p>
+      <div class="prog-strip" id="prog-strip"></div>
+      <div class="plabel" id="prog-lbl"></div>
+    </div>
+    <div style="padding:1.1rem 1.1rem 0">
+      <div class="tc" id="today-card" onclick="openToday()">
+        <div class="tc-lbl">Today's Reflection</div>
+        <div class="tc-day" id="today-dn">Day 1</div>
+        <div class="tc-prompt" id="today-pt"></div>
+        <div class="tc-cta">Open reflection →</div>
+      </div>
+    </div>
+    <div style="padding:1.1rem">
+      <div class="sec-lbl">All Five Weeks</div>
+      <div id="wk-row"></div>
+    </div>
+    <div style="height:1rem"></div>
+  </div>
+  <div class="bnav">
+    <button class="bnav-btn active" onclick="navTo('home')" aria-label="Home"><div class="bi">⌂</div><div class="bl">Home</div></button>
+    <button class="bnav-btn" onclick="navTo('ritual')" aria-label="Ritual"><div class="bi">☀</div><div class="bl">Ritual</div></button>
+    <button class="bnav-btn" onclick="navTo('aff-scr')" aria-label="Affirmations"><div class="bi">♡</div><div class="bl">Affirm</div></button>
+    <button class="bnav-btn" onclick="navTo('export-scr')" aria-label="Export"><div class="bi">↓</div><div class="bl">Export</div></button>
+  </div>
+</div>
+
+<!-- RITUAL -->
+<div class="screen" id="ritual">
+  <div class="top-nav safe-top"><div class="tn-title">Morning Ritual</div><div class="tn-right" id="rit-date"></div></div>
+  <div class="scroll-body">
+    <div class="rit-hero">
+      <div class="rit-eye">Begin Here</div>
+      <div class="rit-title">Set Your Intention</div>
+      <p class="rit-sub">Before the day begins, return to yourself. This is your sacred space to arrive.</p>
+    </div>
+    <div style="padding:1.1rem">
+      <div id="intention-box" style="display:none" class="intention-box">
+        <div class="ib2-lbl">Today's Intention</div>
+        <div class="ib2-text" id="ib2-text"></div>
+      </div>
+      <div class="rit-step">
+        <div class="rs-lbl" style="color:var(--w1)">One · How I arrive today</div>
+        <div class="rs-q">"In one word or phrase, how am I showing up this morning?"</div>
+        <textarea class="rs-ta" id="rit-1" placeholder="e.g. Open. Tired but willing. Ready." rows="2"></textarea>
+      </div>
+      <div class="rit-step">
+        <div class="rs-lbl" style="color:var(--w2)">Two · What I'm releasing</div>
+        <div class="rs-q">"What am I choosing to set down before this day begins?"</div>
+        <textarea class="rs-ta" id="rit-2" placeholder="e.g. The need to prove myself." rows="2"></textarea>
+      </div>
+      <div class="rit-step">
+        <div class="rs-lbl" style="color:var(--w3)">Three · My intention</div>
+        <div class="rs-q">"I intend to move through today with…"</div>
+        <textarea class="rs-ta" id="rit-3" placeholder="e.g. Patience with myself. Grace." rows="2"></textarea>
+      </div>
+      <button class="rit-btn" onclick="sealIntention()">Seal My Intention</button>
+      <div style="margin-top:.75rem;text-align:center">
+        <button style="background:none;border:none;font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--ink-s);cursor:pointer;text-decoration:underline;text-decoration-color:var(--div);min-height:44px" onclick="openToday()">Open today's reflection →</button>
+      </div>
+    </div>
+    <div style="height:1rem"></div>
+  </div>
+  <div class="bnav">
+    <button class="bnav-btn" onclick="navTo('home')" aria-label="Home"><div class="bi">⌂</div><div class="bl">Home</div></button>
+    <button class="bnav-btn active" onclick="navTo('ritual')" aria-label="Ritual"><div class="bi">☀</div><div class="bl">Ritual</div></button>
+    <button class="bnav-btn" onclick="navTo('aff-scr')" aria-label="Affirmations"><div class="bi">♡</div><div class="bl">Affirm</div></button>
+    <button class="bnav-btn" onclick="navTo('export-scr')" aria-label="Export"><div class="bi">↓</div><div class="bl">Export</div></button>
+  </div>
+</div>
+
+<!-- WEEK SCREEN -->
+<div class="screen" id="week-scr">
+  <div class="top-nav safe-top">
+    <button class="tn-back" onclick="showScreen('home');buildHome()">←</button>
+    <div class="tn-title" id="ws-nt">Week 1</div>
+    <div class="tn-right" id="ws-stat"></div>
+  </div>
+  <div class="scroll-body">
+    <div class="wh"><div class="wh-eye" id="wh-eye"></div><div class="wh-title" id="wh-title"></div><div class="wh-int" id="wh-int"></div></div>
+    <div class="aff-c"><div class="aff-l">Weekly Affirmation</div><div class="aff-t" id="ws-aff"></div></div>
+    <div id="wsum-trig"></div>
+    <div style="padding:0 1.1rem 2rem" id="days-list"></div>
+  </div>
+</div>
+
+<!-- WEEK SUMMARY -->
+<div class="screen" id="wsum-scr">
+  <div class="top-nav safe-top">
+    <button class="tn-back" id="wsum-back">←</button>
+    <div class="tn-title" id="wsum-nt">Week Summary</div>
+    <div class="tn-right" id="wsum-stat"></div>
+  </div>
+  <div class="scroll-body">
+    <div class="ws-hero"><div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.3rem" id="wsum-eye"></div><div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:400;color:var(--ink)" id="wsum-title"></div></div>
+    <div style="padding:1.1rem 1.1rem 2rem" id="wsum-body"></div>
+  </div>
+</div>
+
+<!-- DAY SCREEN -->
+<div class="screen" id="day-scr">
+  <div class="top-nav safe-top">
+    <button class="tn-back" id="day-back">←</button>
+    <div class="tn-title" id="ds-nt">Day 1</div>
+    <div class="tn-right" id="ds-stat"></div>
+  </div>
+  <div class="scroll-body" style="display:flex;flex-direction:column">
+    <div class="dh">
+      <div class="dh-lbl">Day</div>
+      <div class="dh-num" id="ds-num"></div>
+      <div class="dh-p" id="ds-p"></div>
+      <div class="dh-rule" id="ds-rule"></div>
+    </div>
+    <div style="padding:1.1rem;display:flex;flex-direction:column;flex:1">
+      <div class="ref-lbl">My Reflection</div>
+      <textarea class="ref-ta" id="ref-ta" placeholder="Begin writing here… there is no right or wrong. Only your truth."></textarea>
+      <div class="ref-foot">
+        <span class="ref-cnt" id="ref-cnt"></span>
+        <button class="save-b" id="save-b" onclick="saveRef()">Save Reflection</button>
+      </div>
+      <div style="height:1rem"></div>
+    </div>
+  </div>
+</div>
+
+<!-- AFFIRMATIONS -->
+<div class="screen" id="aff-scr">
+  <div class="top-nav safe-top"><div class="tn-title">Affirmation Deck</div><div class="tn-right" id="aff-fav-ct"></div></div>
+  <div class="scroll-body">
+    <div class="aff-hero">
+      <div class="aff-hero-eye">Your Words to Carry</div>
+      <div class="aff-hero-t">Five Affirmations</div>
+      <div class="aff-hero-s">One for each week. Save your favorites to your heart.</div>
+    </div>
+    <div style="padding:1.1rem" id="aff-deck"></div>
+    <div style="height:1rem"></div>
+  </div>
+  <div class="bnav">
+    <button class="bnav-btn" onclick="navTo('home')" aria-label="Home"><div class="bi">⌂</div><div class="bl">Home</div></button>
+    <button class="bnav-btn" onclick="navTo('ritual')" aria-label="Ritual"><div class="bi">☀</div><div class="bl">Ritual</div></button>
+    <button class="bnav-btn active" onclick="navTo('aff-scr')" aria-label="Affirmations"><div class="bi">♡</div><div class="bl">Affirm</div></button>
+    <button class="bnav-btn" onclick="navTo('export-scr')" aria-label="Export"><div class="bi">↓</div><div class="bl">Export</div></button>
+  </div>
+</div>
+
+<!-- EXPORT -->
+<div class="screen" id="export-scr">
+  <div class="top-nav safe-top"><div class="tn-title">Export Journal</div><div class="tn-right" id="exp-hd"></div></div>
+  <div class="scroll-body">
+    <div class="exp-hero">
+      <div class="exp-eye">Your Reflections</div>
+      <div class="exp-title">Export & Keep</div>
+      <div class="exp-sub">Your truth, in your words — yours to keep forever.</div>
+    </div>
+    <div style="padding:1.1rem">
+      <div class="stat-grid" id="exp-stats"></div>
+      <div class="sec-lbl" style="margin-bottom:.5rem">Preview</div>
+      <div class="exp-prev" id="exp-prev"></div>
+      <button class="exp-btn" onclick="exportTxt()">↓ &nbsp;Download as Text File</button>
+      <button class="exp-btn sec" onclick="copyAll()">⧉ &nbsp;Copy All to Clipboard</button>
+    </div>
+    <div style="height:1rem"></div>
+  </div>
+  <div class="bnav">
+    <button class="bnav-btn" onclick="navTo('home')" aria-label="Home"><div class="bi">⌂</div><div class="bl">Home</div></button>
+    <button class="bnav-btn" onclick="navTo('ritual')" aria-label="Ritual"><div class="bi">☀</div><div class="bl">Ritual</div></button>
+    <button class="bnav-btn" onclick="navTo('aff-scr')" aria-label="Affirmations"><div class="bi">♡</div><div class="bl">Affirm</div></button>
+    <button class="bnav-btn active" onclick="navTo('export-scr')" aria-label="Export"><div class="bi">↓</div><div class="bl">Export</div></button>
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="screen" id="closing">
+  <div class="cl-c" style="max-width:360px;text-align:center;padding:2rem">
+    <div class="cl-orn">✦</div>
+    <div class="cl-t">You Did It.</div>
+    <p class="cl-b">Thirty days. Thirty honest moments.<br>Thirty steps back to yourself.<br><br>This is not the end — this is where your Joy Continuum&#x2122; begins.</p>
+    <button class="cl-btn" onclick="navTo('home')">Return to Your Journal</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const D={weeks:[
+  {color:'#C4837A',bg:'#FDF4F3',name:'Coming Back to Joy',
+   intention:'Before we can reclaim joy, we must first feel where it lives. This week, return to yourself with curiosity, not judgment.',
+   affirmation:'I do not have to earn the right to feel joy. Joy is not a reward — it is my birthright.',
+   summary:['What shifted for me most this week?','Where did I feel the most resistance — and what was it protecting?','What one word captures what this week revealed?'],
+   days:[{n:1,p:'Where in my life does joy currently feel most natural and unforced?'},{n:2,p:'What has been quietly draining my joy without me fully naming it?'},{n:3,p:'When was the last time I felt light, unburdened, and fully myself? What was happening then?'},{n:4,p:'What do I consistently ignore that my body uses to signal exhaustion or disconnection?'},{n:5,p:'What small moments of joy have I been overlooking because I\u2019m \u201ctoo busy\u201d?'},{n:6,p:'What would it look like to stop earning rest and start honoring it?'},{n:7,p:'If joy had a voice in my life right now, what would it be asking me to change?'}]},
+  {color:'#7A9B7E',bg:'#F4F8F4',name:'Reconnecting to Essence',
+   intention:'Beneath every role you carry, there is a woman who simply is. This week, you remember who that woman is.',
+   affirmation:'I am not the roles I carry. Beneath every expectation lives a woman who is already whole.',
+   summary:['What part of myself did I reconnect with most this week?','Where am I still performing, and what would presence look like instead?','What permission do I need to give myself right now?'],
+   days:[{n:8,p:'When do I feel most aligned with who I truly am \u2014 beyond roles and responsibilities?'},{n:9,p:'What parts of me have I muted to make life easier for others?'},{n:10,p:'What values do I say I live by, and what does my daily life actually reflect?'},{n:11,p:'Where am I performing instead of being present?'},{n:12,p:'What environments help me feel most like myself without effort?'},{n:13,p:'What am I tolerating that contradicts my Essence?'},{n:14,p:'If I stopped seeking approval, what would I immediately start doing differently?'}]},
+  {color:'#C9A96E',bg:'#FBF8F2',name:'Realigning with Truth & Choice',
+   intention:'Truth does not get louder when you ignore it \u2014 it gets heavier. This week, lay that weight down, one honest moment at a time.',
+   affirmation:'My intuition has already answered. I am learning to trust the voice that has always known the way.',
+   summary:['What truth did I stop negotiating with this week?','Where did I choose alignment over comfort \u2014 even a little?','What decision is still waiting for my courage?'],
+   days:[{n:15,p:'What decisions am I postponing that my intuition has already answered?'},{n:16,p:'Where am I choosing comfort over alignment?'},{n:17,p:'What fear is shaping my current season more than faith or clarity?'},{n:18,p:'What boundary do I know I need but have been avoiding setting?'},{n:19,p:'What would I do this week if I trusted myself fully?'},{n:20,p:'Where am I overextending in ways that no longer honor my capacity?'},{n:21,p:'What is one truth I need to stop negotiating with?'}]},
+  {color:'#9B87C4',bg:'#F6F4FB',name:'Designing Legacy Through Joy',
+   intention:'Joy is not a reward for when life settles. It is the architecture of a life well-lived. This week, design what yours looks like.',
+   affirmation:'The legacy I leave is written in the choices I make today. I choose joy. I choose peace. I choose myself.',
+   summary:['What legacy am I most intentional about building right now?','What pattern am I ready to stop passing down?','What does a life rooted in peace \u2014 not pressure \u2014 feel like in my body?'],
+   days:[{n:22,p:'If my life ended as it is today, what legacy would it reflect?'},{n:23,p:'What do I want people to feel after being in my presence?'},{n:24,p:'What patterns am I unintentionally passing down or normalizing?'},{n:25,p:'What would it look like to build a life where joy is structural, not occasional?'},{n:26,p:'Who am I becoming when I consistently choose alignment over approval?'},{n:27,p:'What impact do I want my healing to have on the people connected to me?'},{n:28,p:'What does a legacy rooted in peace, not pressure, look like for me?'}]},
+  {color:'#7AADB9',bg:'#F2F8FA',name:'Integration & Forward Movement',
+   intention:'You have done the excavating. Now comes the building. These final days are not an ending \u2014 they are a beginning.',
+   affirmation:'I have done the excavating. Now I build \u2014 from the vision of who I am becoming.',
+   summary:['What practice will I carry forward from this journey?','Who am I now that I wasn\u2019t fully owning 30 days ago?','What does my Joy Continuum\u2122 begin to look like?'],
+   days:[{n:29,p:'What is one practice I can commit to that protects my joy daily?'},{n:30,p:'If I fully embodied my Joy Continuum\u2122, what would my next chapter begin to look like?'}]}
+]};
+
+let E={},curWeek=0,curDay=1,dayBack='home',wsumW=0,deferredPrompt=null;
+try{E=JSON.parse(localStorage.getItem('jr_pwa')||'{}')}catch(x){}
+function sv(){try{localStorage.setItem('jr_pwa',JSON.stringify(E))}catch(x){}}
+function allDays(){return D.weeks.flatMap(w=>w.days)}
+function dayInfo(n){for(let wi=0;wi<D.weeks.length;wi++){const d=D.weeks[wi].days.find(d=>d.n===n);if(d)return{d,wi}}return null}
+function weekOfDay(n){for(let i=0;i<D.weeks.length;i++)if(D.weeks[i].days.find(d=>d.n===n))return i;return 0}
+function doneCount(){return allDays().filter(d=>E['d'+d.n]&&E['d'+d.n].trim()).length}
+function nextIncomplete(){return allDays().find(d=>!E['d'+d.n]||!E['d'+d.n].trim())||allDays()[allDays().length-1]}
+
+function showToast(msg,dur=2800){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+function enterApp(){buildHome();showInstallBanner();showScreen('home')}
+function navTo(id){
+  if(id==='home')buildHome();
+  else if(id==='ritual')buildRitual();
+  else if(id==='aff-scr')buildAffs();
+  else if(id==='export-scr')buildExport();
+  showScreen(id);
+}
+
+function buildHome(){
+  const done=doneCount();
+  document.getElementById('h-stat').textContent=done+'/30';
+  const strip=document.getElementById('prog-strip');strip.innerHTML='';
+  const next=nextIncomplete();
+  allDays().forEach(d=>{const el=document.createElement('div');el.className='pd'+(E['d'+d.n]&&E['d'+d.n].trim()?' done':d.n===next.n?' cur':'');strip.appendChild(el)});
+  document.getElementById('prog-lbl').textContent=done===0?'Begin with Day 1':done===30?'Journey complete \u2014 all 30 days':done+' day'+(done===1?'':'s')+' complete';
+  const nd=nextIncomplete();
+  document.getElementById('today-dn').textContent='Day '+nd.n;
+  document.getElementById('today-pt').textContent='\u201c'+nd.p+'\u201d';
+  const wr=document.getElementById('wk-row');wr.innerHTML='';
+  D.weeks.forEach((w,i)=>{
+    const dn=w.days.filter(d=>E['d'+d.n]&&E['d'+d.n].trim()).length;
+    const c=document.createElement('div');c.className='wk-card';
+    c.innerHTML=`<div class="wk-dot" style="background:${w.color}"></div><div class="wk-info"><div class="wk-num">Week ${i+1}</div><div class="wk-name">${w.name}</div><div class="wk-pr">${dn} of ${w.days.length} complete</div></div><div class="wk-arr">\u203a</div>`;
+    c.onclick=()=>openWeek(i);wr.appendChild(c);
+  });
+}
+function openToday(){dayBack='home';openDay(nextIncomplete().n)}
+
+function openWeek(idx){
+  curWeek=idx;const w=D.weeks[idx];
+  document.getElementById('ws-nt').textContent='Week '+(idx+1);
+  const dn=w.days.filter(d=>E['d'+d.n]&&E['d'+d.n].trim()).length;
+  document.getElementById('ws-stat').textContent=dn+'/'+w.days.length;
+  const eye=document.getElementById('wh-eye');eye.textContent='Week '+(idx+1);eye.style.color=w.color;
+  document.getElementById('wh-title').textContent=w.name;
+  document.getElementById('wh-int').textContent=w.intention;
+  document.getElementById('ws-aff').textContent='\u201c'+w.affirmation+'\u201d';
+  const trig=document.getElementById('wsum-trig');trig.innerHTML='';
+  if(dn===w.days.length){
+    const sc=document.createElement('div');sc.className='wsum-row';
+    sc.innerHTML=`<div><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:${w.color};margin-bottom:2px">Week ${idx+1} Integration</div><div style="font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--ink-m)">Complete your weekly summary \u2192</div></div><div style="font-size:18px;opacity:.4">\u203a</div>`;
+    sc.onclick=()=>openWSum(idx);trig.appendChild(sc);
+  }
+  const dl=document.getElementById('days-list');dl.innerHTML='';
+  w.days.forEach(d=>{
+    const done=E['d'+d.n]&&E['d'+d.n].trim();
+    const short=d.p.length>50?d.p.substring(0,50)+'\u2026':d.p;
+    const r=document.createElement('div');r.className='dr';
+    r.innerHTML=`<div class="dr-n" style="color:${w.color}">${d.n}</div><div class="dr-c"><div class="dr-lbl">Day ${d.n}</div><div class="dr-p">\u201c${short}\u201d</div></div><div class="dr-ck${done?' done':''}">&#10003;</div>`;
+    r.onclick=()=>{dayBack='week';openDay(d.n)};dl.appendChild(r);
+  });
+  showScreen('week-scr');
+}
+
+function openWSum(idx){
+  wsumW=idx;const w=D.weeks[idx];
+  const eye=document.getElementById('wsum-eye');eye.textContent='Week '+(idx+1)+' \u00b7 Integration';eye.style.color=w.color;
+  document.getElementById('wsum-nt').textContent='Week '+(idx+1)+' Summary';
+  document.getElementById('wsum-stat').textContent=w.name;
+  document.getElementById('wsum-back').onclick=()=>showScreen('week-scr');
+  const saved=E['ws'+idx]||{};
+  const body=document.getElementById('wsum-body');body.innerHTML='';
+  w.summary.forEach((q,qi)=>{
+    const div=document.createElement('div');div.className='ws-q';
+    div.innerHTML=`<div class="ws-ql" style="color:${w.color}">Reflection ${qi+1}</div><div class="ws-qt">\u201c${q}\u201d</div><textarea class="ws-ta" id="wst-${qi}" placeholder="Write freely\u2026" rows="3">${saved[qi]||''}</textarea>`;
+    body.appendChild(div);
+  });
+  const btn=document.createElement('button');btn.className='ws-save'+(E['ws'+idx]?' saved':'');
+  btn.textContent=E['ws'+idx]?'\u2713 Saved':'Save Weekly Summary';
+  btn.onclick=()=>{
+    const data={};w.summary.forEach((_,qi)=>{data[qi]=document.getElementById('wst-'+qi).value});
+    E['ws'+idx]=data;sv();btn.classList.add('saved');btn.textContent='\u2713 Saved';
+    showToast('Week '+(idx+1)+' summary saved \u2728');
+  };
+  body.appendChild(btn);
+  showScreen('wsum-scr');
+}
+
+function openDay(n){
+  curDay=n;const info=dayInfo(n);if(!info)return;
+  const{d,wi}=info;const w=D.weeks[wi];
+  const saved=E['d'+n]||'';const done=saved.trim().length>0;
+  document.getElementById('ds-nt').textContent='Day '+n;
+  document.getElementById('ds-stat').textContent='Week '+(wi+1);
+  document.getElementById('ds-num').textContent=n;document.getElementById('ds-num').style.color=w.color;
+  document.getElementById('ds-p').textContent='\u201c'+d.p+'\u201d';
+  document.getElementById('ds-rule').style.background=w.color;
+  document.getElementById('ref-ta').value=saved;wc(saved);
+  const sb=document.getElementById('save-b');sb.classList.toggle('saved',done);sb.textContent=done?'\u2713 Saved':'Save Reflection';
+  document.getElementById('ref-ta').oninput=function(){wc(this.value)};
+  document.getElementById('day-back').onclick=()=>{if(dayBack==='week')showScreen('week-scr');else{buildHome();showScreen('home')}};
+  showScreen('day-scr');
+}
+function wc(v){const w=v.trim()?v.trim().split(/\s+/).length:0;document.getElementById('ref-cnt').textContent=w>0?w+' word'+(w===1?'':'s'):'';}
+function saveRef(){
+  const val=document.getElementById('ref-ta').value;E['d'+curDay]=val;sv();
+  const sb=document.getElementById('save-b');
+  if(val.trim()){sb.classList.add('saved');sb.textContent='\u2713 Saved';const wi=weekOfDay(curDay);showToast('\u201c'+D.weeks[wi].affirmation.substring(0,48)+'\u2026\u201d');if(doneCount()===30)setTimeout(()=>showScreen('closing'),1400);}
+  else{sb.classList.remove('saved');sb.textContent='Save Reflection';}
+}
+
+function buildRitual(){
+  document.getElementById('rit-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const s=E['rit']||{};['1','2','3'].forEach(k=>{const el=document.getElementById('rit-'+k);if(el)el.value=s[k]||''});
+  const ib=document.getElementById('intention-box');const it=document.getElementById('ib2-text');
+  if(s['3']&&s['3'].trim()){ib.style.display='block';it.textContent='I intend to move through today with '+s['3'].trim()+'.';}
+  else{ib.style.display='none';}
+}
+function sealIntention(){
+  const data={'1':document.getElementById('rit-1').value,'2':document.getElementById('rit-2').value,'3':document.getElementById('rit-3').value};
+  E['rit']=data;sv();
+  if(data['3'].trim()){document.getElementById('ib2-text').textContent='I intend to move through today with '+data['3'].trim()+'.';document.getElementById('intention-box').style.display='block';}
+  showToast('Your intention is set. You are ready. \u2728');
+}
+
+function buildAffs(){
+  const favs=E['favs']||[];document.getElementById('aff-fav-ct').textContent=favs.length+' saved';
+  const deck=document.getElementById('aff-deck');deck.innerHTML='';
+  D.weeks.forEach((w,i)=>{
+    const isFav=favs.includes(i);const card=document.createElement('div');card.className='aff-big';
+    card.style.background=w.bg;card.style.border='1px solid '+w.color+'30';
+    card.innerHTML=`<button class="ab-fav${isFav?' active':''}" id="fav-${i}" onclick="toggleFav(${i})" aria-label="Save affirmation">${isFav?'\u2665':'\u2661'}</button><div class="ab-week" style="color:${w.color}">Week ${i+1}</div><div class="ab-wname">${w.name}</div><div class="ab-text">\u201c${w.affirmation}\u201d</div>`;
+    deck.appendChild(card);
+  });
+}
+function toggleFav(idx){
+  let favs=E['favs']||[];
+  if(favs.includes(idx)){favs=favs.filter(f=>f!==idx)}else{favs.push(idx)}
+  E['favs']=favs;sv();buildAffs();
+}
+
+function buildExport(){
+  const all=allDays();const done=all.filter(d=>E['d'+d.n]&&E['d'+d.n].trim());
+  const words=done.reduce((s,d)=>{const v=E['d'+d.n]||'';return s+(v.trim()?v.trim().split(/\s+/).length:0)},0);
+  const wks=D.weeks.filter((_,i)=>D.weeks[i].days.some(d=>E['d'+d.n]&&E['d'+d.n].trim())).length;
+  document.getElementById('exp-hd').textContent=done.length+' entries';
+  document.getElementById('exp-stats').innerHTML=`<div class="stat-c"><div class="sv" style="color:var(--sage)">${done.length}</div><div class="sl">Days done</div></div><div class="stat-c"><div class="sv" style="color:var(--gold)">${words.toLocaleString()}</div><div class="sl">Words</div></div><div class="stat-c"><div class="sv" style="color:var(--lav)">${wks}</div><div class="sl">Weeks</div></div>`;
+  const prev=document.getElementById('exp-prev');prev.innerHTML='';
+  if(done.length===0){prev.innerHTML='<p style="font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--ink-s);font-size:.9rem;text-align:center;padding:.75rem">Your reflections will appear here as you write.</p>';return;}
+  done.slice(0,4).forEach(d=>{
+    const wi=weekOfDay(d.n);const w=D.weeks[wi];
+    const div=document.createElement('div');div.className='ep-day';
+    div.innerHTML=`<div class="ep-head"><span class="ep-num" style="color:${w.color}">Day ${d.n}</span><span class="ep-q"> \u2014 \u201c${d.p.substring(0,40)}\u2026\u201d</span></div><div class="ep-entry">${(E['d'+d.n]||'').substring(0,140)+(E['d'+d.n]&&E['d'+d.n].length>140?'\u2026':'')}</div>`;
+    prev.appendChild(div);
+  });
+  if(done.length>4){const m=document.createElement('p');m.style='font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--ink-s);font-size:.88rem;text-align:center;padding:.4rem 0';m.textContent='+ '+(done.length-4)+' more in your download';prev.appendChild(m);}
+}
+function buildExportText(){
+  let t='THE JOY RESET\u2122 \u2014 My Journal\nBy Leah A. Owens\nExported: '+new Date().toLocaleDateString()+'\n\n'+'='.repeat(42)+'\n\n';
+  D.weeks.forEach((w,wi)=>{
+    t+='WEEK '+(wi+1)+': '+w.name.toUpperCase()+'\n'+'-'.repeat(42)+'\nAffirmation: "'+w.affirmation+'"\n\n';
+    w.days.forEach(d=>{const v=E['d'+d.n];if(v&&v.trim()){t+='Day '+d.n+'\nPrompt: "'+d.p+'"\nMy Reflection:\n'+v.trim()+'\n\n';}});
+    const ws=E['ws'+wi];if(ws){t+='Week '+(wi+1)+' Summary:\n';w.summary.forEach((q,qi)=>{if(ws[qi]&&ws[qi].trim()){t+=q+'\n'+ws[qi].trim()+'\n\n';}});}
+    t+='\n';
+  });
+  return t+'='.repeat(42)+'\n"You have done the excavating. Now you build."\n\u2014 The Joy Reset\u2122';
+}
+function exportTxt(){
+  const blob=new Blob([buildExportText()],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download='TheJoyReset_Journal.txt';document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);showToast('Journal downloaded \u2728');
+}
+function copyAll(){
+  if(navigator.clipboard){navigator.clipboard.writeText(buildExportText()).then(()=>showToast('Copied to clipboard \u2713')).catch(()=>showToast('Use download button instead'));}
+  else{showToast('Use the download button');}
+}
+
+function showInstallBanner(){
+  const bar=document.getElementById('install-bar');
+  const dismissed=localStorage.getItem('jr_install_dismissed');
+  const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(isStandalone||dismissed){bar.innerHTML='';return;}
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  if(isIOS){
+    bar.innerHTML=`<div class="install-banner"><div class="ib-icon">📲</div><div class="ib-text"><div class="ib-title">Add to Home Screen</div><div class="ib-sub">Tap the share button below, then "Add to Home Screen"</div></div><button class="ib-close" onclick="dismissInstall()">✕</button></div>`;
+  } else if(deferredPrompt){
+    bar.innerHTML=`<div class="install-banner"><div class="ib-icon">📲</div><div class="ib-text"><div class="ib-title">Install the App</div><div class="ib-sub">Add The Joy Reset to your home screen for offline access</div></div><button class="ib-btn" onclick="installApp()">Install</button><button class="ib-close" onclick="dismissInstall()">✕</button></div>`;
+  }
+}
+function installApp(){
+  if(!deferredPrompt)return;deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted'){dismissInstall();showToast('App installed! Find it on your home screen \u2728');}deferredPrompt=null;});
+}
+function dismissInstall(){localStorage.setItem('jr_install_dismissed','1');document.getElementById('install-bar').innerHTML='';}
+
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>
